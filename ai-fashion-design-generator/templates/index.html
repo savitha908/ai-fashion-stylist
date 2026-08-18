@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Fashion Design Generator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+<div class="app-wrapper">
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">✦</div>
+      <span>FashionAI</span>
+    </div>
+    <nav>
+      <button class="active" onclick="showPage('design', this)">✦ Design</button>
+      <button onclick="showPage('gallery', this)">◈ Explore</button>
+      <button onclick="showPage('wardrobe', this)">◻ Wardrobe</button>
+    </nav>
+    <div class="header-badge">AI POWERED</div>
+  </header>
+
+  <main>
+
+    <!-- ══════════ PAGE: DESIGN ══════════ -->
+    <div id="page-design" class="page active">
+
+      <div class="hero">
+        <h1>Design Clothes with AI</h1>
+        <p>Describe your dream outfit and watch it come to life. No artistic skills required.</p>
+
+        <div class="prompt-box">
+          <div class="prompt-row">
+            <textarea id="promptInput" rows="2" placeholder="e.g. A flowy boho midi dress with floral print, earth tones, off-shoulder with lace trim…"></textarea>
+            <button class="btn-generate" id="generateBtn" onclick="generateDesign()">
+              <span id="btnIcon">✦</span>
+              <span id="btnText">Generate</span>
+            </button>
+          </div>
+          <div class="chips">
+            <span class="chip" onclick="useChip(this)">🌸 Boho Floral Dress</span>
+            <span class="chip" onclick="useChip(this)">🖤 Minimalist Black Suit</span>
+            <span class="chip" onclick="useChip(this)">🌊 Coastal Summer Set</span>
+            <span class="chip" onclick="useChip(this)">🔥 Streetwear Hoodie</span>
+            <span class="chip" onclick="useChip(this)">👑 Elegant Evening Gown</span>
+            <span class="chip" onclick="useChip(this)">🌿 Cottagecore Prairie Dress</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Style Filters -->
+      <div class="filters">
+        <button class="filter-btn active" onclick="toggleFilter(this)">All Styles</button>
+        <button class="filter-btn" onclick="toggleFilter(this)">Casual</button>
+        <button class="filter-btn" onclick="toggleFilter(this)">Formal</button>
+        <button class="filter-btn" onclick="toggleFilter(this)">Streetwear</button>
+        <button class="filter-btn" onclick="toggleFilter(this)">Boho</button>
+        <button class="filter-btn" onclick="toggleFilter(this)">Minimalist</button>
+        <button class="filter-btn" onclick="toggleFilter(this)">Vintage</button>
+      </div>
+
+      <!-- Canvas + Details -->
+      <div class="two-col">
+
+        <!-- Left: Canvas -->
+        <div class="design-panel">
+          <div class="panel-header">
+            <span>Design Canvas</span>
+            <div class="live-badge"><div class="live-dot"></div> AI Generated</div>
+          </div>
+          <div class="canvas-area">
+            <div class="mannequin-wrap">
+              <svg id="designSvg" width="260" height="420" viewBox="0 0 260 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="skinGrad" cx="50%" cy="30%" r="70%">
+                    <stop offset="0%" stop-color="#ffe0c4"/>
+                    <stop offset="100%" stop-color="#d4a98a"/>
+                  </radialGradient>
+                  <linearGradient id="garmentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#9333ea" id="grad-stop1"/>
+                    <stop offset="100%" stop-color="#ec4899" id="grad-stop2"/>
+                  </linearGradient>
+                  <linearGradient id="garmentGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#7c3aed" id="grad2-stop1"/>
+                    <stop offset="100%" stop-color="#be185d" id="grad2-stop2"/>
+                  </linearGradient>
+                </defs>
+                <ellipse cx="130" cy="42" rx="28" ry="32" fill="url(#skinGrad)"/>
+                <path d="M102 30 Q110 0 130 2 Q150 0 158 30 Q152 10 130 10 Q108 10 102 30Z" fill="#2d1b69"/>
+                <rect x="121" y="70" width="18" height="20" rx="4" fill="url(#skinGrad)"/>
+                <path d="M88 95 Q80 92 72 108 L60 155 Q58 170 130 172 Q202 170 200 155 L188 108 Q180 92 172 95 Q155 88 145 90 L130 95 L115 90 Q105 88 88 95Z" fill="url(#garmentGrad)"/>
+                <path d="M115 90 Q125 105 130 108 Q135 105 145 90" stroke="url(#garmentGrad2)" stroke-width="2" fill="none"/>
+                <path d="M72 108 Q50 130 48 165 Q52 168 62 160 L68 130 Z" fill="url(#skinGrad)"/>
+                <path d="M188 108 Q210 130 212 165 Q208 168 198 160 L192 130 Z" fill="url(#skinGrad)"/>
+                <path d="M72 108 Q60 115 52 148 Q56 152 64 148 L74 118 Z" fill="url(#garmentGrad)" opacity="0.9"/>
+                <path d="M188 108 Q200 115 208 148 Q204 152 196 148 L186 118 Z" fill="url(#garmentGrad)" opacity="0.9"/>
+                <path d="M60 155 Q55 200 58 260 Q80 280 130 282 Q180 280 202 260 Q205 200 200 155 Q165 170 130 172 Q95 170 60 155Z" fill="url(#garmentGrad2)"/>
+                <g id="svgPattern" opacity="0">
+                  <circle cx="90" cy="190" r="5" fill="white" opacity="0.2"/>
+                  <circle cx="120" cy="210" r="4" fill="white" opacity="0.2"/>
+                  <circle cx="150" cy="195" r="6" fill="white" opacity="0.15"/>
+                  <circle cx="170" cy="225" r="4" fill="white" opacity="0.2"/>
+                  <circle cx="100" cy="240" r="5" fill="white" opacity="0.15"/>
+                </g>
+                <rect x="62" y="167" width="136" height="10" rx="4" fill="rgba(0,0,0,0.3)"/>
+                <rect x="100" y="278" width="26" height="90" rx="10" fill="url(#skinGrad)"/>
+                <rect x="134" y="278" width="26" height="90" rx="10" fill="url(#skinGrad)"/>
+                <ellipse cx="113" cy="372" rx="18" ry="8" fill="#1a1a2e"/>
+                <ellipse cx="147" cy="372" rx="18" ry="8" fill="#1a1a2e"/>
+              </svg>
+            </div>
+            <div class="generating-overlay" id="generatingOverlay">
+              <div class="spinner"></div>
+              <div class="gen-text">Generating Design...</div>
+              <div class="gen-steps" id="genSteps">Analyzing style prompt…</div>
+            </div>
+          </div>
+          <div class="canvas-actions">
+            <button class="btn-sm primary" onclick="saveDesign()">⬇ Save Design</button>
+            <button class="btn-sm" onclick="remixDesign()">↺ Remix</button>
+            <button class="btn-sm" onclick="shareDesign()">⤴ Share</button>
+            <button class="btn-sm" onclick="toggleView()">⇄ Front / Back</button>
+          </div>
+        </div>
+
+        <!-- Right: Details -->
+        <div class="detail-panel">
+          <div class="panel-header">
+            <span>Design Details</span>
+            <span style="color:var(--accent);font-size:0.78rem;">✦ AI Styled</span>
+          </div>
+          <div class="detail-scroll">
+            <div>
+              <div class="design-title" id="designTitle">Midnight Bloom Midi Dress</div>
+              <div class="design-tags" id="designTags">
+                <span class="tag">Boho</span><span class="tag">Floral</span>
+                <span class="tag">Feminine</span><span class="tag">Midi Length</span>
+              </div>
+            </div>
+            <div>
+              <div class="label-sm">Color Palette</div>
+              <div class="palette-row">
+                <div class="swatch selected" style="background:#9333ea" onclick="applyColor(this,'#9333ea','#ec4899')" title="Purple Dream"></div>
+                <div class="swatch" style="background:#0ea5e9" onclick="applyColor(this,'#0ea5e9','#38bdf8')" title="Ocean Blue"></div>
+                <div class="swatch" style="background:#f59e0b" onclick="applyColor(this,'#f59e0b','#fcd34d')" title="Golden Hour"></div>
+                <div class="swatch" style="background:#10b981" onclick="applyColor(this,'#10b981','#6ee7b7')" title="Forest Sage"></div>
+                <div class="swatch" style="background:#ef4444" onclick="applyColor(this,'#ef4444','#fca5a5')" title="Rose Red"></div>
+                <div class="swatch" style="background:#1e1e2a;border-color:#555" onclick="applyColor(this,'#2a2a3a','#4a4a5a')" title="Midnight"></div>
+              </div>
+              <div class="swatch-label" id="colorLabel">Purple Dream</div>
+            </div>
+            <hr class="divider"/>
+            <div>
+              <div class="label-sm">Specifications</div>
+              <table class="spec-table">
+                <tr><td>Silhouette</td><td id="specSilhouette">A-Line Midi</td></tr>
+                <tr><td>Neckline</td><td id="specNeckline">Off-Shoulder</td></tr>
+                <tr><td>Sleeve</td><td id="specSleeve">Short Flutter</td></tr>
+                <tr><td>Fabric</td><td id="specFabric">Chiffon / Lace</td></tr>
+                <tr><td>Occasion</td><td id="specOccasion">Casual / Garden Party</td></tr>
+                <tr><td>Est. Cost</td><td id="specCost" style="color:var(--green)">$45 – $120</td></tr>
+              </table>
+            </div>
+            <div>
+              <div class="flex-row" style="margin-bottom:6px;">
+                <div class="label-sm" style="margin-bottom:0">Design Complexity</div>
+                <div class="complexity-bar"><div class="complexity-fill" id="complexityFill" style="width:60%"></div></div>
+                <span style="font-size:0.75rem;color:var(--accent)" id="complexityLabel">Medium</span>
+              </div>
+            </div>
+            <hr class="divider"/>
+            <div>
+              <div class="label-sm">AI Style Suggestions</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;" id="aiSuggestions">
+                <span class="suggestion-pill" onclick="useChip(this)">✦ Add lace hem</span>
+                <span class="suggestion-pill" onclick="useChip(this)">✦ Try pastel tones</span>
+                <span class="suggestion-pill" onclick="useChip(this)">✦ Add belt detail</span>
+                <span class="suggestion-pill" onclick="useChip(this)">✦ Floral embroidery</span>
+              </div>
+            </div>
+            <div class="info-box">
+              ✦ This design was created from your text prompt. Use color swatches to customize, or remix for a variation.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div class="section-header">
+        <div class="section-title"><div class="dot"></div> Similar Affordable Products</div>
+        <a href="#" class="section-link" onclick="shuffleProducts(); return false;">↻ Refresh</a>
+      </div>
+      <div class="three-col" id="productGrid"></div>
+
+    </div><!-- /page-design -->
+
+
+    <!-- ══════════ PAGE: GALLERY ══════════ -->
+    <div id="page-gallery" class="page">
+      <div class="section-header" style="margin-bottom:24px;">
+        <div class="section-title"><div class="dot"></div> Inspiration Gallery</div>
+        <select class="style-select" style="width:auto;padding:6px 12px;" onchange="filterGallery(this.value)">
+          <option value="all">All Styles</option>
+          <option value="boho">Boho</option>
+          <option value="formal">Formal</option>
+          <option value="streetwear">Streetwear</option>
+          <option value="minimalist">Minimalist</option>
+        </select>
+      </div>
+      <div class="gallery" id="galleryGrid"></div>
+    </div>
+
+
+    <!-- ══════════ PAGE: WARDROBE ══════════ -->
+    <div id="page-wardrobe" class="page">
+      <div class="section-header" style="margin-bottom:24px;">
+        <div class="section-title"><div class="dot"></div> My Wardrobe</div>
+        <button class="btn-sm primary" onclick="showPage('design', document.querySelectorAll('nav button')[0])">+ Create New</button>
+      </div>
+      <div id="wardrobeEmpty" style="text-align:center;padding:80px 0;color:var(--muted);">
+        <div style="font-size:4rem;margin-bottom:16px;">◻</div>
+        <div style="font-size:1.1rem;font-weight:600;margin-bottom:8px;">Your wardrobe is empty</div>
+        <div style="font-size:0.88rem;">Generate designs and save them here.</div>
+      </div>
+      <div class="gallery" id="wardrobeGrid" style="display:none;"></div>
+    </div>
+
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
